@@ -50,7 +50,7 @@ cd ../frontend
 npm install
 
 ```
-##SetUp env
+SetUp env
 
 ```bash
 MONGODB_URI=your_mongodb_connection_string
@@ -60,12 +60,12 @@ CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
 ```
 ---
-##Run backend
+Run backend
 ```bash
 cd backend
 npm run dev
 ```
-##Run frontend
+Run frontend
 ```bash
 cd frontend
 npm run dev
