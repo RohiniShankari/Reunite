@@ -72,6 +72,7 @@ export default function ListingDetail() {
       setLoading(false);
     }
   };
+  
 
   if (!listing) return <p className="text-center mt-10">Loading...</p>;
 const loggedInUserId = localStorage.getItem("userId");
@@ -108,7 +109,18 @@ const isOwner = loggedInUserId === listing.ownerId?._id.toString();
           >
             {loading ? "Deleting..." : "Delete Listing"}
           </button>
+
+          
         )}
+        {isOwner && (
+            <button
+              onClick={() => navigate(`/listing/${id}/edit`)}
+              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+            >
+              Edit Listing
+            </button>
+          )}
+
       </div>
     </div>
   );

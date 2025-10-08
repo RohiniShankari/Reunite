@@ -86,3 +86,41 @@ export const deleteListing = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+export const updateListing = async (req, res) => {
+  try {
+    const { title, description, location, type } = req.body;
+    const listing = await Listing.findById(req.params.id);
+
+    if (!listing) return res.status(404).json({ message: "Listing not found" });
+
+    // Only the owner can update
+    if (listing.ownerId.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    // Update fields
+    listing.title = title || listing.title;
+    listing.description = description || listing.description;
+    listing.location = location || listing.location;
+    listing.type = type || listing.type;
+
+    // If new image is uploaded
+    if (req.file) {
+      const uploaded = await cloudinary.uploader.upload_stream(
+        { folder: "listings" },
+        (error, result) => {
+          if (error) return res.status(500).json({ message: "Image upload failed" });
+          listing.imageUrl = result.secure_url;
+          listing.save().then(updated => res.json(updated));
+        }
+      );
+      uploaded.end(req.file.buffer);
+    } else {
+      await listing.save();
+      res.json(listing);
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
