@@ -1,0 +1,11 @@
+import express from "express";
+import { createListing, getListings ,getListing,deleteListing} from "../controllers/listingController.js";
+import { protect,verifyToken } from "../middleware/authMiddleware.js";
+import upload from "../middleware/uploadMiddleware.js";
+const router = express.Router();
+router.get("/:id", getListing);
+router.get("/", getListings);
+router.delete("/:id", verifyToken, deleteListing);
+// router.post("/", protect, createListing);
+router.post("/", protect, upload.single("image"), createListing);
+export default router;
